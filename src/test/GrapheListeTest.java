@@ -1,3 +1,4 @@
+package graphe;
 import graphe.Arc;
 import graphe.GrapheListe;
 
