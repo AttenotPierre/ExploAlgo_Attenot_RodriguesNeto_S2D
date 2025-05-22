@@ -1,8 +1,5 @@
-package graphe;
-import graphe.Arc;
-import graphe.GrapheListe;
+package src.graphe;
 import java.util.List;
-import graphe.Graphe;
 /**
  * 
  * Algorithme pointFixe(Graphe g, Noeud depart)

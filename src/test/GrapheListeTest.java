@@ -1,6 +1,6 @@
-package graphe;
-import graphe.Arc;
-import graphe.GrapheListe;
+package src.test;
+import src.graphe.Arc;
+import src.graphe.GrapheListe;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

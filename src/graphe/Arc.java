@@ -1,4 +1,4 @@
-package graphe;
+package src.graphe;
 
 /**
  * Classe représentant un arc sortant d'un nœud

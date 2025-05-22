@@ -1,6 +1,4 @@
-package graphe;
-import graphe.Arc;
-import graphe.GrapheListe;
+package src.graphe;
 
 
 public class MainBellmanFord {

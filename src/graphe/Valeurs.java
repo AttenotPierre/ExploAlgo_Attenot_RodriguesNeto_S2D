@@ -1,4 +1,6 @@
-package graphe;
+package src.graphe;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -83,4 +85,18 @@ public class Valeurs {
         }
         return res;
     }
+
+    public List<String> calculerChemin(String destination) {
+        List<String> chemin = new ArrayList<>();
+        String courant = destination;
+
+        // Remonter jusqu'à la racine (noeud sans parent)
+        while (courant != null) {
+            chemin.add(0, courant); // ajoute en début de liste
+            courant = this.getParent(courant);
+        }
+
+        return chemin;
+    }
 }
+
