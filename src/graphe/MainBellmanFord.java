@@ -1,4 +1,4 @@
-package src.graphe;
+package graphe;
 
 
 public class MainBellmanFord {

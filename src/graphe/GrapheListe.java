@@ -1,6 +1,10 @@
-package src.graphe;
+package graphe;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Implémentation de l'interface Graphe utilisant des listes d'adjacence

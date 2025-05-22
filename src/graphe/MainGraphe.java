@@ -1,4 +1,4 @@
-package src.graphe;
+package graphe;
 public class MainGraphe {
     public static void main(String[] args) {
         // Création du graphe de la Figure 1
