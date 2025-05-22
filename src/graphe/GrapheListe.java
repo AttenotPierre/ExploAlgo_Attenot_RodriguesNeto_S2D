@@ -94,6 +94,44 @@ public class GrapheListe implements Graphe {
     
         return sb.toString();
     }
-
-    
+    private void chargerDepuisFichier(String nomFichier) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(nomFichier))) {
+            String ligne;
+            int numeroLigne = 0;
+            
+            while ((ligne = reader.readLine()) != null) {
+                numeroLigne++;
+                ligne = ligne.trim();
+                
+                // Ignorer les lignes vides
+                if (ligne.isEmpty()) {
+                    continue;
+                }
+                
+                // Séparer les colonnes par tabulation
+                String[] parties = ligne.split("\t");
+                
+                if (parties.length >= 3) {
+                    try {
+                        String noeudDepart = parties[0].trim();
+                        String noeudArrivee = parties[1].trim();
+                        double cout = Double.parseDouble(parties[2].trim());
+                        
+                        // Ajouter l'arc au graphe
+                        ajouterArc(noeudDepart, noeudArrivee, cout);
+                        
+                    } catch (NumberFormatException e) {
+                        System.err.println("Erreur ligne " + numeroLigne + 
+                                         " : impossible de parser le coût '" + parties[2] + "'");
+                    }
+                } else {
+                    System.err.println("Erreur ligne " + numeroLigne + 
+                                     " : format incorrect (attendu: noeud_depart\\tnoeud_arrivee\\tcout)");
+                }
+            }
+        }
+        
+        System.out.println("Graphe chargé depuis " + nomFichier + " : " + 
+                          noeuds.size() + " nœuds");
+    }
 }
