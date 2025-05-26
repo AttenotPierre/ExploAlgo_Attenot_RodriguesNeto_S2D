@@ -100,20 +100,25 @@ public class Valeurs {
         return res.toString();
     }
 
-    /**
-     * Calcule le chemin (liste des nœuds) depuis le départ jusqu'à la destination.
-     * @param destination Nœud d'arrivée
-     * @return Liste ordonnée des nœuds à parcourir
-     */
     public List<String> calculerChemin(String destination) {
-        List<String> chemin = new ArrayList<>();
-        String courant = destination;
+    List<String> chemin = new ArrayList<>();
 
-        while (courant != null) {
-            chemin.add(0, courant); // ajout en tête
-            courant = this.getParent(courant);
-        }
+    // On commence par la destination
+    String courant = destination;
 
-        return chemin;
+    // Si aucun parent n'existe et la distance est infinie, le nœud est inaccessible
+    if (this.getValeur(courant) == Double.MAX_VALUE) {
+        return chemin; // Retourne une liste vide (pas de chemin)
     }
+    System.out.println("Valeur de " + destination + " = " + this.getValeur(destination));
+
+    // Remonter jusqu'à ce qu'on atteigne le départ (parent == null)
+    while (courant != null) {
+        chemin.add(0, courant); // ajoute en tête de la liste
+        courant = this.getParent(courant);
+    }
+
+    return chemin;
+}
+
 }

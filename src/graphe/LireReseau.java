@@ -8,61 +8,86 @@ import java.util.Map;
 
 /**
  * Classe pour lire le réseau du métro parisien depuis un fichier texte
- * (format particulier avec stations et connexions)
+ * (format avec : liste de stations puis connexions)
  */
 public class LireReseau {
 
     /**
-     * Méthode pour lire le fichier du réseau du métro parisien
-     * @param fichier le fichier texte contenant le réseau
-     * @return Graphe correspondant au réseau
+     * Lit un fichier de métro et construit le graphe associé.
+     * @param fichier Chemin du fichier texte
+     * @return Graphe du réseau
      */
     public static Graphe lire(String fichier) {
         GrapheListe graphe = new GrapheListe();
-        Map<String, String> idToNom = new HashMap<>();
+        Map<Integer, String> idVersNom = new HashMap<>();
+        boolean lectureStations = false;
         boolean lectureConnexions = false;
 
         try (BufferedReader br = new BufferedReader(new FileReader(fichier))) {
             String ligne;
+
             while ((ligne = br.readLine()) != null) {
                 ligne = ligne.trim();
 
-                // ignorer les lignes vides ou commentaires
-                if (ligne.isEmpty() || ligne.startsWith("%")) continue;
 
-                if (ligne.startsWith("%% Connexions")) {
+
+                // Détection des sections
+                if (ligne.toLowerCase().contains("stations")) {
+                    System.out.println("Section STATIONS détectée.");
+                    lectureStations = true;
+                    lectureConnexions = false;
+                    continue;
+                }
+
+
+               if (ligne.toLowerCase().contains("connex")) {
+                    System.out.println(" Section CONNEXIONS détectée.");
+                    lectureStations = false;
                     lectureConnexions = true;
                     continue;
                 }
 
-                if (!lectureConnexions) {
-                    // Traitement des stations
-                    String[] parts = ligne.split(":");
+
+                // Traitement des stations
+                if (lectureStations) {
+                    // Format : id:nom:x:y:lignes
+                    String[] parts = ligne.split(":", 5);
                     if (parts.length >= 2) {
-                        String id = parts[0].trim();
-                        String nom = parts[1].trim();
-                        idToNom.put(id, nom);
-                        graphe.ajouterArc(nom, nom, 0); // ajoute le noeud
+                        try {
+                            int id = Integer.parseInt(parts[0].trim());
+                            String nom = parts[1].trim();
+                            idVersNom.put(id, nom);
+                            graphe.ajouterNoeud(nom); // ajout simple du nœud
+                        } catch (NumberFormatException e) {
+                            System.err.println("Erreur ID station invalide : " + ligne);
+                        }
                     }
-                } else {
-                    // Traitement des connexions
-                    String[] parts = ligne.split(":");
+                }
+
+                // Traitement des connexions
+                else if (lectureConnexions) {
+                    // Format : id1:id2:temps:ligne
+                    String[] parts = ligne.split(":", 4);
                     if (parts.length >= 4) {
-                        String idDepart = parts[0].trim();
-                        String idArrivee = parts[1].trim();
-                        double cout = Double.parseDouble(parts[2].trim());
-                        String ligneMetro = parts[3].trim();
+                        try {
+                            int id1 = Integer.parseInt(parts[0].trim());
+                            int id2 = Integer.parseInt(parts[1].trim());
+                            double cout = Double.parseDouble(parts[2].trim());
+                            String ligneMetro = parts[3].trim();
 
-                        String nomDepart = idToNom.get(idDepart);
-                        String nomArrivee = idToNom.get(idArrivee);
+                            String nom1 = idVersNom.get(id1);
+                            String nom2 = idVersNom.get(id2);
 
-                        if (nomDepart != null && nomArrivee != null) {
-                            // arcs bidirectionnels
-                            graphe.ajouterArc(nomDepart, nomArrivee, cout, ligneMetro);
-                            graphe.ajouterArc(nomArrivee, nomDepart, cout, ligneMetro);
-                        } else {
-                            System.err.println("Erreur : station inconnue pour ID " +
-                                    idDepart + " ou " + idArrivee);
+                            if (nom1 != null && nom2 != null) {
+                                // arcs bidirectionnels avec info ligne
+                                graphe.ajouterArc(nom1, nom2, cout, ligneMetro);
+                                graphe.ajouterArc(nom2, nom1, cout, ligneMetro);
+                            } else {
+                                System.err.println("Connexion ignorée : station inconnue (id " + id1 + " ou " + id2 + ")");
+                            }
+
+                        } catch (NumberFormatException e) {
+                            System.err.println("Erreur de format (connexion) : " + ligne);
                         }
                     }
                 }
@@ -72,7 +97,7 @@ public class LireReseau {
             System.err.println("Erreur de lecture du fichier : " + e.getMessage());
         }
 
-        System.out.println("Chargement terminé. Nombre de stations : " + graphe.listeNoeuds().size());
+        System.out.println("✅ Chargement terminé. Nombre de stations : " + graphe.listeNoeuds().size());
         return graphe;
     }
 }

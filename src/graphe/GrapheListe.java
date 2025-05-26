@@ -36,7 +36,7 @@ public class GrapheListe implements Graphe {
      * @param n nœud à ajouter
      * @return indice du nœud dans la liste
      */
-    private int ajouterNoeud(String n) {
+    public int ajouterNoeud(String n) {
         int indice = getIndice(n);
         if (indice == -1) {
             // Le nœud n'existe pas encore, on l'ajoute
@@ -103,11 +103,11 @@ public class GrapheListe implements Graphe {
         int indiceDepart = ajouterNoeud(depart);
         ajouterNoeud(destination);
 
-        Arc arc = new Arc(destination, cout, ligne); // utilise le constructeur avec ligne
+        Arc arc = new Arc(destination, cout, ligne);
         this.adjacence.get(indiceDepart).ajouterArc(arc);
     }
-    
 
+    
     private void chargerDepuisFichier(String nomFichier) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(nomFichier))) {
             String ligne;

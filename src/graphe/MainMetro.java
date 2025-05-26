@@ -4,7 +4,7 @@ import java.util.List;
 
 public class MainMetro {
     public static void main(String[] args) {
-        Graphe g = LireReseau.lire("metro-paris.txt");
+        Graphe g = LireReseau.lire("O:/BUT1/SAE_ExplorationAlgorithmique/ExploAlgo_Attenot_RodriguesNeto_S2D/src/graphe/Grp/plan-reseau.txt");
 
         String[][] trajets = {
             {"Châtelet", "Nation"},
@@ -14,7 +14,13 @@ public class MainMetro {
             {"Montparnasse Bienvenue", "Bastille"}
         };
 
-        // === Affichage classique ===
+        System.out.println("\n✅ Vérification des noms de stations chargées :");
+        for (String s : g.listeNoeuds()) {
+            if (s.contains("Châtelet") || s.contains("Nation") || s.contains("Gare de Lyon")) {
+                System.out.println("> " + s);
+            }
+        }
+
         System.out.printf("%-30s | %-30s | %-40s | %-20s | %-20s\n",
                           "Départ", "Arrivée", "Chemin (Bellman)", "Temps Bellman (ms)", "Temps Dijkstra (ms)");
         System.out.println("----------------------------------------------------------------------------------------------------------------------");
@@ -38,12 +44,12 @@ public class MainMetro {
             long endD = System.nanoTime();
             double tempsD = (endD - startD) / 1e6;
             List<String> cheminD = resD.calculerChemin(arrivee);
-
+            
             System.out.printf("%-30s | %-30s | %-40s | %-20.2f | %-20.2f\n",
                               depart, arrivee, cheminBF, tempsBF, tempsD);
         }
 
-        // === Bellman-Ford 2 avec pénalité ===
+        
         System.out.println("\n--- Avec pénalité de changement de ligne (Bellman-Ford v2) ---");
         System.out.printf("%-30s | %-30s | %-40s | %-20s\n",
                           "Départ", "Arrivée", "Chemin (BF2)", "Temps Bellman2 (ms)");
@@ -64,7 +70,7 @@ public class MainMetro {
                               depart, arrivee, chemin, temps);
         }
 
-        // === Dijkstra 2 avec pénalité ===
+        
         System.out.println("\n--- Avec pénalité de changement de ligne (Dijkstra v2) ---");
         System.out.printf("%-30s | %-30s | %-40s | %-20s\n",
                           "Départ", "Arrivée", "Chemin (Dijkstra2)", "Temps Dijkstra2 (ms)");
