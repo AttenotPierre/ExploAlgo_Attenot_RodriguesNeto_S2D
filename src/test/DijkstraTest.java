@@ -1,7 +1,7 @@
-package src.test;
-import src.graphe.GrapheListe;
-import src.graphe.Dijkstra;
-import src.graphe.Valeurs;
+package test;
+import graphe.GrapheListe;
+import graphe.Dijkstra;
+import graphe.Valeurs;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;

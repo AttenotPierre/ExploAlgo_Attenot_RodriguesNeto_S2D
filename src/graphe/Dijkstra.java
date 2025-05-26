@@ -105,4 +105,54 @@ public class Dijkstra {
         
         return noeudMin;
     }
+
+
+    public Valeurs resoudre2(Graphe g, String depart) {
+        Valeurs valeurs = new Valeurs();
+        List<String> Q = new ArrayList<>();
+
+        List<String> noeuds = g.listeNoeuds();
+        for (String v : noeuds) {
+            valeurs.setValeur(v, Double.MAX_VALUE);
+            valeurs.setParent(v, null);
+            valeurs.setLigne(v, null);
+            Q.add(v);
+        }
+
+        valeurs.setValeur(depart, 0);
+        valeurs.setLigne(depart, null);
+
+        while (!Q.isEmpty()) {
+            // Trouver le nœud de valeur minimale dans Q
+            String u = trouverNoeudValeurMinimale(Q, valeurs);
+            Q.remove(u);
+
+            String ligneArrivee = valeurs.getLigne(u);
+
+            for (Arc arc : g.suivants(u)) {
+                String v = arc.getDest();
+
+                if (Q.contains(v)) {
+                    double coutArc = arc.getCout();
+                    String ligneArc = arc.getLigne();
+
+                    double penalite = 0;
+                    if (ligneArrivee != null && ligneArc != null && !ligneArrivee.equals(ligneArc)) {
+                        penalite = 10;
+                    }
+
+                    double d = valeurs.getValeur(u) + coutArc + penalite;
+
+                    if (d < valeurs.getValeur(v)) {
+                        valeurs.setValeur(v, d);
+                        valeurs.setParent(v, u);
+                        valeurs.setLigne(v, ligneArc);
+                    }
+                }
+            }
+        }
+
+        return valeurs;
+    }
+
 }

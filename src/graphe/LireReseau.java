@@ -3,58 +3,76 @@ package graphe;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Classe pour lire un réseau de transport depuis un fichier
+ * Classe pour lire le réseau du métro parisien depuis un fichier texte
+ * (format particulier avec stations et connexions)
  */
 public class LireReseau {
 
     /**
-     * Méthode statique pour lire un graphe depuis un fichier
-     * @param fichier nom du fichier à lire
-     * @return Graphe chargé depuis le fichier
+     * Méthode pour lire le fichier du réseau du métro parisien
+     * @param fichier le fichier texte contenant le réseau
+     * @return Graphe correspondant au réseau
      */
     public static Graphe lire(String fichier) {
         GrapheListe graphe = new GrapheListe();
+        Map<String, String> idToNom = new HashMap<>();
+        boolean lectureConnexions = false;
 
         try (BufferedReader br = new BufferedReader(new FileReader(fichier))) {
             String ligne;
-            int numeroLigne = 0;
-
             while ((ligne = br.readLine()) != null) {
-                numeroLigne++;
                 ligne = ligne.trim();
 
-                // Ignorer les lignes vides
-                if (ligne.isEmpty()) {
+                // ignorer les lignes vides ou commentaires
+                if (ligne.isEmpty() || ligne.startsWith("%")) continue;
+
+                if (ligne.startsWith("%% Connexions")) {
+                    lectureConnexions = true;
                     continue;
                 }
 
-                // Supposons que le fichier est tabulé et que les colonnes sont :
-                // nomDepart \t nomArrivee \t cout \t ligneTransport (ligneTransport ignorée ici)
-                String[] parties = ligne.split("\t");
-
-                if (parties.length >= 3) {
-                    try {
-                        String nomDepart = parties[0].trim();
-                        String nomArrivee = parties[1].trim();
-                        double cout = Double.parseDouble(parties[2].trim());
-
-                        // Appel corrigé : uniquement 3 arguments
-                        graphe.ajouterArc(nomDepart, nomArrivee, cout);
-
-                    } catch (NumberFormatException e) {
-                        System.err.println("Erreur ligne " + numeroLigne + " : coût non valide '" + parties[2] + "'");
+                if (!lectureConnexions) {
+                    // Traitement des stations
+                    String[] parts = ligne.split(":");
+                    if (parts.length >= 2) {
+                        String id = parts[0].trim();
+                        String nom = parts[1].trim();
+                        idToNom.put(id, nom);
+                        graphe.ajouterArc(nom, nom, 0); // ajoute le noeud
                     }
                 } else {
-                    System.err.println("Erreur ligne " + numeroLigne + " : format incorrect, attendu au moins 3 colonnes");
+                    // Traitement des connexions
+                    String[] parts = ligne.split(":");
+                    if (parts.length >= 4) {
+                        String idDepart = parts[0].trim();
+                        String idArrivee = parts[1].trim();
+                        double cout = Double.parseDouble(parts[2].trim());
+                        String ligneMetro = parts[3].trim();
+
+                        String nomDepart = idToNom.get(idDepart);
+                        String nomArrivee = idToNom.get(idArrivee);
+
+                        if (nomDepart != null && nomArrivee != null) {
+                            // arcs bidirectionnels
+                            graphe.ajouterArc(nomDepart, nomArrivee, cout, ligneMetro);
+                            graphe.ajouterArc(nomArrivee, nomDepart, cout, ligneMetro);
+                        } else {
+                            System.err.println("Erreur : station inconnue pour ID " +
+                                    idDepart + " ou " + idArrivee);
+                        }
+                    }
                 }
             }
+
         } catch (IOException e) {
-            System.err.println("Erreur lecture du fichier " + fichier + " : " + e.getMessage());
+            System.err.println("Erreur de lecture du fichier : " + e.getMessage());
         }
 
-        System.out.println("Graphe chargé depuis " + fichier + " avec " + graphe.listeNoeuds().size() + " nœuds");
+        System.out.println("Chargement terminé. Nombre de stations : " + graphe.listeNoeuds().size());
         return graphe;
     }
 }

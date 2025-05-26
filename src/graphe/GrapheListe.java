@@ -98,6 +98,16 @@ public class GrapheListe implements Graphe {
     
         return sb.toString();
     }
+
+    public void ajouterArc(String depart, String destination, double cout, String ligne) {
+        int indiceDepart = ajouterNoeud(depart);
+        ajouterNoeud(destination);
+
+        Arc arc = new Arc(destination, cout, ligne); // utilise le constructeur avec ligne
+        this.adjacence.get(indiceDepart).ajouterArc(arc);
+    }
+    
+
     private void chargerDepuisFichier(String nomFichier) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(nomFichier))) {
             String ligne;

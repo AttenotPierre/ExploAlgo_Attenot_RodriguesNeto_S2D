@@ -1,102 +1,119 @@
 package graphe;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Classe fournie, permet de stocker des valeurs associées au noeud et 
- * des parents.
- * - un noeud est représenté par un String (son nom)
- * - on accède avec des get (getValeur et getParent)
- * - on modifie avec des set (setValeur et setParent)
+ * Classe permettant de stocker :
+ * - une valeur (distance) pour chaque nœud,
+ * - un parent (prédécesseur) pour chaque nœud,
+ * - la ligne utilisée pour atteindre chaque nœud (pour gérer les changements de ligne).
  */
 public class Valeurs {
 
-    /**
-     * Attributs pour stocker les informations 
-     * (type Table = Dictionnaire)
-     */
-    Map<String, Double> valeur;
-    Map<String, String> parent;
+    private Map<String, Double> valeur;
+    private Map<String, String> parent;
+    private Map<String, String> ligne; // ligne utilisée pour atteindre le nœud
 
     /**
-     * Constructeur vide (initialise la possibilité de stocker 
-     * des valeurs)
+     * Constructeur vide initialisant les structures de données.
      */
     public Valeurs() {
         this.valeur = new TreeMap<>();
         this.parent = new TreeMap<>();
+        this.ligne = new TreeMap<>();
     }
 
     /**
-     * Associe une valeur à un nom de noeud (L(X))
-     *
-     * @param nom    le nom du noeud
-     * @param valeur la valeur associée
+     * Associe une valeur à un nœud.
+     * @param nom Nom du nœud
+     * @param valeur Valeur associée (distance)
      */
     public void setValeur(String nom, double valeur) {
         this.valeur.put(nom, valeur);
     }
 
     /**
-     * Associe un parent à un nom de noeud (parent(X))
-     *
-     * @param nom    nom du noeud
-     * @param parent nom du noeud parent associé
+     * Accède à la valeur associée à un nœud.
+     * @param nom Nom du nœud
+     * @return Valeur stockée (distance)
+     */
+    public double getValeur(String nom) {
+        return this.valeur.getOrDefault(nom, Double.MAX_VALUE);
+    }
+
+    /**
+     * Associe un parent à un nœud.
+     * @param nom Nom du nœud
+     * @param parent Nom du nœud parent
      */
     public void setParent(String nom, String parent) {
         this.parent.put(nom, parent);
     }
 
     /**
-     * Accède au parent stocké associé au noeud passé en paramètre
-     *
-     * @param nom nom du noeud
-     * @return le nom du noeud parent
+     * Accède au parent d'un nœud.
+     * @param nom Nom du nœud
+     * @return Nom du parent
      */
     public String getParent(String nom) {
         return this.parent.get(nom);
     }
 
     /**
-     * Accède à la valeur associée au noeud passé en paramètre
-     *
-     * @param nom nom du noeud
-     * @return la valeur stockée
+     * Associe une ligne utilisée pour atteindre un nœud.
+     * @param nom Nom du nœud
+     * @param ligne Nom ou numéro de la ligne
      */
-    public double getValeur(String nom) {
-        return this.valeur.get(nom);
+    public void setLigne(String nom, String ligne) {
+        this.ligne.put(nom, ligne);
     }
 
     /**
-     * Retourne une chaîne qui affiche le contenu :
-     * - par noeud stocké
-     * - pour chaque noeud, affiche la valeur puis le parent
-     *
-     * @return descriptif des noeuds
+     * Accède à la ligne utilisée pour atteindre un nœud.
+     * @param nom Nom du nœud
+     * @return Ligne associée
      */
+    public String getLigne(String nom) {
+        return this.ligne.get(nom);
+    }
+
+    /**
+     * Affiche toutes les valeurs, parents et lignes utilisées.
+     * @return Chaîne formatée
+     */
+    @Override
     public String toString() {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for (String s : this.valeur.keySet()) {
             Double valeurNoeud = valeur.get(s);
             String noeudParent = parent.get(s);
-            res += s + " ->  V:" + valeurNoeud + " p:" + noeudParent + "\n";
+            String ligneUtilisee = ligne.get(s);
+            res.append(s)
+               .append(" -> V:").append(valeurNoeud)
+               .append(" p:").append(noeudParent)
+               .append(" l:").append(ligneUtilisee)
+               .append("\n");
         }
-        return res;
+        return res.toString();
     }
 
+    /**
+     * Calcule le chemin (liste des nœuds) depuis le départ jusqu'à la destination.
+     * @param destination Nœud d'arrivée
+     * @return Liste ordonnée des nœuds à parcourir
+     */
     public List<String> calculerChemin(String destination) {
         List<String> chemin = new ArrayList<>();
         String courant = destination;
 
-        // Remonter jusqu'à la racine (noeud sans parent)
         while (courant != null) {
-            chemin.add(0, courant); // ajoute en début de liste
+            chemin.add(0, courant); // ajout en tête
             courant = this.getParent(courant);
         }
 
         return chemin;
     }
 }
-
