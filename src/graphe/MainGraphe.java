@@ -1,4 +1,14 @@
 package graphe;
+/**
+ * Classe de test pour la structure de graphe à base de listes d’adjacence.
+ *
+ * Ce programme crée un graphe orienté simple correspondant à un exemple (Figure 1),
+ * ajoute plusieurs arcs entre les nœuds, puis affiche :
+ *  la liste des nœuds du graphe
+ *  les arcs sortants de chaque nœud
+ *
+ * Il permet de vérifier visuellement que la structure GrapheListe fonctionne correctement.
+ */
 public class MainGraphe {
     public static void main(String[] args) {
         // Création du graphe de la Figure 1

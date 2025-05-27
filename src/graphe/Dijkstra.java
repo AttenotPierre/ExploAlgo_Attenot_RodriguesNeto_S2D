@@ -38,6 +38,18 @@ public class Dijkstra {
      * Fin
      */
     
+     /**
+     * Résout le problème du plus court chemin à partir d'un sommet de départ, 
+     * en utilisant l'algorithme classique de Dijkstra.
+     * 
+     * Paramètres :
+     *  g : le graphe dans lequel effectuer la recherche
+     *  depart : le sommet de départ
+     * 
+     * Retour :
+     * un objet Valeurs contenant les distances minimales depuis le sommet de départ,
+     *   ainsi que le parent de chaque sommet sur le chemin le plus court
+     */
     public Valeurs resoudre(Graphe g, String depart) {
         // Initialisation de l'objet Valeurs pour stocker les résultats
         Valeurs valeurs = new Valeurs();
@@ -91,6 +103,16 @@ public class Dijkstra {
         return valeurs;
     }
     
+    /**
+     * Méthode utilitaire pour trouver dans la liste Q le nœud ayant la plus petite distance estimée.
+     * 
+     * Paramètres :
+     *  Q : liste des sommets encore à traiter
+     *  valeurs : objet contenant les distances actuelles pour chaque sommet
+     * 
+     * Retour :
+     *  le sommet de Q avec la valeur minimale
+     */
     private String trouverNoeudValeurMinimale(List<String> Q, Valeurs valeurs) {
         String noeudMin = Q.get(0);
         double valeurMin = valeurs.getValeur(noeudMin);
@@ -106,7 +128,17 @@ public class Dijkstra {
         return noeudMin;
     }
 
-
+    /**
+    * Variante de l'algorithme de Dijkstra prenant en compte une pénalité
+    * lors des changements de ligne (modélisation de transitions avec surcoût, par exemple dans un réseau de transport).
+    * 
+    * Paramètres :
+    *  g : le graphe contenant les arcs avec informations de ligne
+    *  depart : le sommet de départ
+    * 
+    * Retour :
+    * un objet Valeurs contenant les distances, parents et lignes optimisées avec pénalité de changement de ligne
+    */
     public Valeurs resoudre2(Graphe g, String depart) {
         Valeurs valeurs = new Valeurs();
         List<String> Q = new ArrayList<>();

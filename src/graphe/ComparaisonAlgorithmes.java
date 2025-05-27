@@ -8,8 +8,29 @@ import graphe.Valeurs;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+/**
+ * Classe utilitaire permettant de comparer les algorithmes de Bellman-Ford
+ * et de Dijkstra sur un graphe pondéré lu depuis un fichier texte.
+ *
+ * Le programme :
+ * Lit le graphe à partir d’un fichier contenant les arcs (origine, destination, poids)
+ * Exécute Bellman-Ford et Dijkstra à partir d’un sommet de départ
+ * Compare les distances et les parents calculés par chaque algorithme
+ * Affiche les temps d'exécution et un tableau comparatif des résultats
+ *
+ * Usage : java ComparaisonAlgorithmes chemin_du_fichier sommet_depart
+ */
 public class ComparaisonAlgorithmes {
-    
+        /**
+ * Point d'entrée principal pour lancer la comparaison entre Bellman-Ford et Dijkstra.
+ *
+ * Paramètres :
+ * args[0] : chemin du fichier décrivant le graphe
+ * args[1] : nom du sommet de départ
+ *
+ * @param args les arguments passés en ligne de commande
+ * @throws Exception en cas d’erreur de lecture de fichier ou de traitement du graphe
+ */
     public static void main(String[] args) throws Exception {
         String fichier = args[0];
         String depart = args[1];

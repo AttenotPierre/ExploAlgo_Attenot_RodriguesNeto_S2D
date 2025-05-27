@@ -62,13 +62,23 @@ public class GrapheListe implements Graphe {
         Arc nouveauArc = new Arc(destination, cout);
         this.adjacence.get(indiceDepart).ajouterArc(nouveauArc);
     }
-    
+    /**
+     * Retourne la liste des noms de tous les nœuds du graphe.
+     *
+     * @return Liste de tous les nœuds
+     */
     @Override
     public List<String> listeNoeuds() {
         return new ArrayList<>(this.noeuds);
     }
     
     @Override
+    /**
+     * Retourne la liste des arcs sortants du nœud donné.
+     *
+     * @param n Nom du nœud source
+     * @return Liste des arcs sortants depuis ce nœud, ou liste vide s'il n'existe pas
+     */
     public List<Arc> suivants(String n) {
         int indice = getIndice(n);
         if (indice != -1) {
@@ -77,7 +87,11 @@ public class GrapheListe implements Graphe {
         // Si le nœud n'existe pas, on retourne une liste vide
         return new ArrayList<>();
     }
-
+    /**
+     * Représentation textuelle du graphe : chaque ligne contient un nœud et ses arcs sortants.
+     *
+     * @return Chaîne représentant le graphe
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -107,7 +121,13 @@ public class GrapheListe implements Graphe {
         this.adjacence.get(indiceDepart).ajouterArc(arc);
     }
 
-    
+    /**
+     * Charge un graphe depuis un fichier texte structuré.
+     * Chaque ligne doit être de la forme : noeud_depart [tabulation] noeud_arrivee [tabulation] coût.
+     *
+     * @param nomFichier Nom ou chemin du fichier à lire
+     * @throws IOException En cas d'erreur de lecture du fichier
+     */
     private void chargerDepuisFichier(String nomFichier) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(nomFichier))) {
             String ligne;

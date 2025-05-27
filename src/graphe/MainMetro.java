@@ -1,11 +1,35 @@
 package graphe;
 
 import java.util.List;
+/**
+ * Classe principale de test pour l'application de calcul de plus courts chemins dans un réseau de métro.
+ * 
+ * Cette classe charge un graphe depuis un fichier représentant un plan de métro
+ * et calcule le plus court chemin entre plusieurs paires de stations, en utilisant :
+ *  l’algorithme de Bellman-Ford
+ *  l’algorithme de Dijkstra
+ *  leurs variantes prenant en compte une pénalité lors des changements de ligne
+ * 
+ * Elle affiche pour chaque méthode :
+ *  le chemin trouvé
+ *  le temps d'exécution
+ */
 
 public class MainMetro {
+    /**
+     * Point d'entrée de l'application.
+     *
+     * @param args Arguments de la ligne de commande (non utilisés ici)
+     *
+     * Étapes principales :
+     *  Charge un graphe depuis un fichier de plan de réseau
+     *  Définit une liste de trajets à évaluer
+     *  Applique plusieurs variantes d’algorithmes de plus court chemin
+     *  Affiche les chemins trouvés et les temps d’exécution associés
+     */
     public static void main(String[] args) {
         Graphe g = LireReseau.lire("src/graphe/Grp/plan-reseau.txt");
-
+        // Liste des trajets de test entre stations du réseau
         String[][] trajets = {
             {"Châtelet", "Nation"},
             {"Porte de Clignancourt", "Gare de Lyon"},

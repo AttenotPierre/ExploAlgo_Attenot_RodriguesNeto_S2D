@@ -108,7 +108,14 @@
             return valeurs;
         }
 
-
+        /**
+         * Variante de l'algorithme de Bellman-Ford qui prend en compte une pénalité
+         * lors des changements de ligne (utile pour les graphes modélisant un réseau de transport).
+         *
+         * @param g graphe pondéré avec informations de lignes
+         * @param depart nom du nœud de départ
+         * @return objet contenant les distances, parents et lignes associées à chaque nœud
+         */
         public Valeurs resoudre2(Graphe g, String depart) {
             Valeurs valeurs = new Valeurs();
 
