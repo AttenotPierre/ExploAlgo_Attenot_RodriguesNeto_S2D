@@ -4,7 +4,7 @@ import java.util.List;
 
 public class MainMetro {
     public static void main(String[] args) {
-        Graphe g = LireReseau.lire("O:/BUT1/SAE_ExplorationAlgorithmique/ExploAlgo_Attenot_RodriguesNeto_S2D/src/graphe/Grp/plan-reseau.txt");
+        Graphe g = LireReseau.lire("src/graphe/Grp/plan-reseau.txt");
 
         String[][] trajets = {
             {"Châtelet", "Nation"},
