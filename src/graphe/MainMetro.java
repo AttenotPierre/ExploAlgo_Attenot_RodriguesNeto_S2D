@@ -28,7 +28,7 @@ public class MainMetro {
      *  Affiche les chemins trouvés et les temps d’exécution associés
      */
     public static void main(String[] args) {
-        Graphe g = LireReseau.lire("src/graphe/Grp/plan-reseau.txt");
+        Graphe g = LireReseau.lire("graphe/Grp/plan-reseau.txt");
         // Liste des trajets de test entre stations du réseau
         String[][] trajets = {
             {"Châtelet", "Nation"},
@@ -38,7 +38,7 @@ public class MainMetro {
             {"Montparnasse Bienvenue", "Bastille"}
         };
 
-        System.out.println("\n✅ Vérification des noms de stations chargées :");
+        System.out.println("\nVérification des noms de stations chargées :");
         for (String s : g.listeNoeuds()) {
             if (s.contains("Châtelet") || s.contains("Nation") || s.contains("Gare de Lyon")) {
                 System.out.println("> " + s);
